@@ -1,25 +1,39 @@
-# Segmentation Project Main script
-# We keep the main file in def main so that when it only runs when it is called
-import os
-from PIL import Image
-from tkinter import filedialog
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from PIL import Image, ImageTk
 
 
-def get_image_path():
-    # Prompt user to select an image file
-    root = Tk()
-    root.withdraw() # hide the Tkinter root window
-    file_path = filedialog.askopenfilename(title="Select Image",
-                                           filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.bmp")])
-    # Check if file format is supported
-    _, ext = os.path.splitext(file_path)
-    if ext.lower() not in SUPPORTED_FORMATS:
-        raise ValueError(f"Unsupported file format: {ext}")
-    return file_path
+def open_image(image_label):
+    file_path = filedialog.askopenfilename(
+        filetypes=[("Image files", "*.jpg;*.jpeg;*.png;*.bmp;*.gif"), ("All files", "*.*")])
+    if file_path:
+        try:
+            image = Image.open(file_path)
+            image.thumbnail((400, 400))  # Resize the image to fit the label
+
+            photo = ImageTk.PhotoImage(image)
+            image_label.config(image=photo)
+            image_label.image = photo
+        except IOError:
+            messagebox.showerror("Error", "The selected file is not a supported image format.")
 
 
 def main():
-    # Add your code here
-    print("Hello Friends :)")
-if __name__ == '__main__':
+    # Create the main window
+    root = tk.Tk()
+    root.title("Image Viewer")
+
+    # Create a label to display the image
+    image_label = tk.Label(root)
+    image_label.pack()
+
+    # Create a button for opening the image
+    open_button = tk.Button(root, text="Open Image", command=lambda: open_image(image_label))
+    open_button.pack()
+
+    # Run the main event loop
+    root.mainloop()
+
+
+if __name__ == "__main__":
     main()
