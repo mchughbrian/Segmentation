@@ -27,7 +27,8 @@ def open_image(image_label):
     if file_path:
         try:
             image = Image.open(file_path)
-            image.thumbnail((400, 400))  # Resize the image to fit the label
+            image = cartoonize_image(image)  # Cartoonize the image
+            image.thumbnail((700, 700))  # Resize the image to fit the label
 
             photo = ImageTk.PhotoImage(image)
             image_label.config(image=photo)
