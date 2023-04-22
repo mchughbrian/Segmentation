@@ -3,6 +3,9 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import numpy as np
 import cv2
+from rembg import remove
+
+
 
 def cartoonize_image(image, ksize=5, n_colors=10):
     gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
@@ -27,6 +30,7 @@ def open_image(image_label):
     if file_path:
         try:
             image = Image.open(file_path)
+            image = remove(image)  # Remove the background
             image = cartoonize_image(image)  # Cartoonize the image
             image.thumbnail((700, 700))  # Resize the image to fit the label
 
